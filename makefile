@@ -7,7 +7,7 @@ vpath %.h $(INCLPATH)
 OBJS =  \
  Source.o \
  Dot.o \
- field.o
+ Field.o
 
 all: Dots
  

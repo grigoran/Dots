@@ -1,53 +1,109 @@
 #include "Dot.h"
 #include <iostream>
-Dot::Dot(sf::Vector2i _field, sf::Vector2i res) :
-	field(_field)
+
+sf::Color Dot::getColor(char team)
 {
-	mesh = new char* [field.x];
-	for (int i = 0; i < field.x; i++) {
-		mesh[i] = new char[field.y];
-		for (int j = 0; j < field.y; j++) {
+	switch (team)
+	{
+	case 1:
+		return sf::Color::Red;
+		break;
+	case 2:
+		return sf::Color::Green;
+		break;
+	case 3:
+		return sf::Color::Blue;
+		break;
+	case 4:
+		return sf::Color::Yellow;
+		break;
+	default:
+		return sf::Color::Black;
+		break;
+	}
+}
+
+Dot::Dot(Field* _field)
+{
+	field=_field;
+	mesh = new char *[field->getField().x];
+	for (int i = 0; i < field->getField().x; i++)
+	{
+		mesh[i] = new char[field->getField().y];
+		for (int j = 0; j < field->getField().y; j++)
+		{
 			mesh[i][j] = 0;
 		}
 	}
-	texture.create(res.x, res.y);
+	dotTex.create(field->getRes().x, field->getRes().y);
 }
 
-bool Dot::push(sf::Vector2f pos, sf::Vector2i node, sf::Color col, char team) {
-	if (node.x < field.x && node.y < field.y && node.x >= 0 && node.y >= 0)
-		if (mesh[node.x][node.y] == 0) {
+bool Dot::push(sf::Vector2f pos, char team)
+{
+	sf::Vector2i node=field->getNode(pos);
+	if (node.x < field->getField().x && node.y < field->getField().y && node.x >= 0 && node.y >= 0)
+		if (mesh[node.x][node.y] == 0)
+		{
 			sf::CircleShape circle(10.0f);
 			circle.setOrigin(10, 10);
 			circle.setPosition(pos);
-			circle.setFillColor(col);
-
-			texture.draw(circle);
-			texture.display();
-			sprite.setTexture(texture.getTexture());
+			circle.setFillColor(getColor(team));
+			dotTex.draw(circle);
+			dotTex.display();
+			dotsSpr.setTexture(dotTex.getTexture());
 			mesh[node.x][node.y] = team;
-			//TODO: remove later
-			//***********************************
-			system("clear");
-			for(int i=0; i<field.y; i++){
-				for(int j=0; j<field.x; j++){
-					std::cout<<(int)mesh[j][i]<<" ";
-				}
-				std::cout<<"\n";
-			}
-			//***********************************
+			last = node;
 			return true;
 		}
 	return false;
 }
 
-
-void Dot::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(sprite);
+void Dot::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+	target.draw(dotsSpr);
 }
 
+void Dot::clear()
+{
+	dotTex.clear(sf::Color::Transparent);
+	for (int i = 0; i < field->getField().x; i++)
+	{
+		for (int j = 0; j < field->getField().y; j++)
+		{
+			mesh[i][j] = 0;
+		}
+	}
+}
 
-Dot::~Dot() {
-	for (int i = 0; i < field.y; i++) {
+void Dot::undo()
+{
+	mesh[last.x][last.y] = 0;
+	redraw();
+}
+
+void Dot::redraw()
+{
+	//float dst = (float)dotTex.getSize().x / field->getField().x;
+	dotTex.clear(sf::Color::Transparent);
+	sf::CircleShape circle(10.0f);
+	circle.setOrigin(10, 10);
+	for (int i = 0; i < field->getField().x; i++)
+	{
+		for (int j = 0; j < field->getField().y; j++)
+		{
+			if(mesh[i][j]!=0){
+				circle.setPosition(field->getPosIndex(i,j));
+				circle.setFillColor(getColor(mesh[i][j]));
+				dotTex.draw(circle);
+			}
+		}
+	}
+}
+
+Dot::~Dot()
+{
+	for (int i = 0; i < field->getField().x; i++)
+	{
 		delete[] mesh[i];
 	}
 	delete[] mesh;

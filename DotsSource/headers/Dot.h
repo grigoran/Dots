@@ -1,16 +1,25 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Field.h"
 class Dot: public sf::Drawable
 {
 public:
-	Dot(sf::Vector2i _field, sf::Vector2i res);
-	bool push(sf::Vector2f pos,sf::Vector2i node, sf::Color col, char team);
+	Dot(Field* _field);
+	bool push(sf::Vector2f pos, char team);
+	void clear();
+	void undo();
+	static sf::Color getColor(char team);
 	~Dot();
 private:
-	sf::Vector2i field;
+	Field* field;
+	sf::Vector2i last;
 	char** mesh;
-	sf::RenderTexture texture;
-	sf::Sprite sprite;
+	sf::RenderTexture dotTex; //texture for dots
+	sf::RenderTexture lnTex; //texture for lines
+	//sprites for dots and lines
+	sf::Sprite lnSprite;
+	sf::Sprite dotsSpr;
+	void redraw();
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
 

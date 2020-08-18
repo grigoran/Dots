@@ -1,26 +1,21 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "field.h"
 #include "Dot.h"
 
 int main()
 {
-    sf::Vector2i resolution(1200, 600);
-    sf::RenderWindow window(sf::VideoMode(resolution.x,resolution.y), "Dots!");
+    sf::Vector2i resolution(900, 900);
+    sf::RenderWindow window(sf::VideoMode(resolution.x, resolution.y), "Dots!");
     window.setFramerateLimit(60);
 
-
-    sf::View view= window.getView();
+    sf::View view = window.getView();
     //view.zoom(1.5);
     window.setView(view);
-    
     Field field(resolution, 22, 3);
-    Dot dots(field.getField(), resolution);
+    Dot dots(&field);
 
     sf::Vector2i mousepos = sf::Mouse::getPosition(window);
-
     sf::CircleShape dot(10.0f);
-    sf::Color color= sf::Color::Red;
     dot.setFillColor(sf::Color::Red);
     dot.setOrigin(10, 10);
 
@@ -41,48 +36,61 @@ int main()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Escape) window.close();
+            if (event.type == sf::Event::KeyPressed)
+            {
+                if (event.key.code == sf::Keyboard::Escape)
+                    window.close();
+                switch (event.key.code)
+                {
+                case sf::Keyboard::Escape:
+                    window.close();
+                    break;
+
+                case sf::Keyboard::Num1:
+                    team=1;
+                break;
+
+                case sf::Keyboard::Num2:
+                    team=2;
+                break;
+
+                case sf::Keyboard::Num3:
+                    team=3;
+                break;
+
+                case sf::Keyboard::Num4:
+                    team=4;
+                break;
+
+                case sf::Keyboard::C:
+                    dots.clear();
+                break;
+
+                case sf::Keyboard::Z:
+                    dots.undo();
+                break;
+
+                }
             }
         }
 
-
         mousepos = sf::Mouse::getPosition(window);
-        target = field.getPos(mousepos);
-        dst = target- dot.getPosition();
-
-        switch (team)
-        {
-        case 1:
-            color = sf::Color::Red;
-            break;
-        case 2:
-            color = sf::Color::Blue;
-            break;
-        case 3:
-            color = sf::Color::Yellow;
-            break;
-        case 4:
-            color = sf::Color::Green;
-            break;
-        default:
-            break;
-        }
+        target = field.getTarget(mousepos);
+        dst = target - dot.getPosition();        
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
-            if (dots.push(target, field.getNode(target),color,team))
-                team++;
+            dots.push(target, team);
         }
-        if (team > 4) team = 1;
-        dot.move(dst*deltaTime.asSeconds()*10.0f);
+
+        dot.move(dst * deltaTime.asSeconds() * 10.0f);
 
         window.clear(sf::Color::White);
 
         window.draw(field);
-        dot.setFillColor(color);
-        window.draw(dot);
+        dot.setFillColor(Dot::getColor(team));
         window.draw(dots);
+        window.draw(dot);
         window.display();
     }
 
