@@ -5,7 +5,7 @@
 
 int main()
 {
-    sf::Vector2i resolution(800, 600);
+    sf::Vector2i resolution(1200, 600);
     sf::RenderWindow window(sf::VideoMode(resolution.x,resolution.y), "Dots!");
     window.setFramerateLimit(60);
 
@@ -14,7 +14,7 @@ int main()
     //view.zoom(1.5);
     window.setView(view);
     
-    Field field(resolution, 20, 3);
+    Field field(resolution, 22, 3);
     Dot dots(field.getField(), resolution);
 
     sf::Vector2i mousepos = sf::Mouse::getPosition(window);

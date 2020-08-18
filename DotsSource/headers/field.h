@@ -8,7 +8,7 @@ public:
 	sf::Vector2i getNode(sf::Vector2f pos);
 	sf::Vector2i getField();
 private:
-	float dst;
+	float dst; //distance between lines
 	int yCount;
 	float k;
 	int lineCount;

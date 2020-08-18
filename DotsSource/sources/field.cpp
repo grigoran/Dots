@@ -1,5 +1,6 @@
 #include "field.h"
 #include <iostream>
+#include <math.h>
 
 
 Field::Field(sf::Vector2i resol, int count, float thicknes):
@@ -15,13 +16,13 @@ Field::Field(sf::Vector2i resol, int count, float thicknes):
 
 	dst = (float)resol.x / lineCount;
 	yCount = resol.y / dst;
+	std::cout<<yCount<<std::endl;
 
-	for (int i = 1; i <= lineCount; i++) {
-		verticalLine.setPosition(i * dst, 0);
+	k = dst/2;
+	for (int i = 0; i <lineCount; i++) {
+		verticalLine.setPosition(i * dst+k, 0);
 		texture.draw(verticalLine);
 	}
-
-	k = ((float)resol.y - (yCount - 1) * dst + dst) / 4;
 
 
 	for (int i = 0; i < yCount; i++) {
@@ -38,15 +39,15 @@ sf::Vector2i Field::getField() {
 
 sf::Vector2i Field::getNode(sf::Vector2f pos) {
 	sf::Vector2i res;
-	res.x = round(pos.x / dst);
+	res.x = floor(pos.x / dst);
 	res.y = floor(pos.y / dst);
 	return res;
 }
 
 sf::Vector2f Field::getPos(sf::Vector2i pos) {
 	sf::Vector2f res;
-	res.x = round(pos.x / dst)*dst;
-	res.y = floor(pos.y / dst )*dst+k;
+	res.x = round((pos.x-k) / dst)*dst+k;
+	res.y = round((pos.y-k) / dst)*dst+k;
 	return res;
 }
 
