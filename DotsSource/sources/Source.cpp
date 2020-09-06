@@ -18,7 +18,7 @@ int main() {
   sf::View view = window.getView();
   // view.zoom(1.5);
   window.setView(view);
-  Field field(resolution, 22, 3);
+  Field field(resolution, 22, 1);
   Dot dots(&field);
 
   sf::Vector2i mousepos = sf::Mouse::getPosition(window);
@@ -83,9 +83,10 @@ int main() {
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
       Node* node=dots.push(target, team);
-      if (node->isConected())
+      if (node->isConected()){
         std::cout <<ESCAPE_GREEN <<"FIND!\n" << ESCAPE_NORMAL;  // Lines push
         contours.add(node);
+      }
     }
 
     dot.move(dst * deltaTime.asSeconds() * 10.0f);

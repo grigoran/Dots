@@ -18,6 +18,10 @@ void Contours::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   for (int i = 0; i < contours.size(); i++) {
     start = contours[i];
     now = start->getNext();
+    startPoint=field->getPosIndex(start->getIndex());
+    endPoint=field->getPosIndex(now->getIndex());
+    line.set(startPoint, endPoint, now->getColor(), 1);
+    target.draw(line);
     while (now != start) {
       startPoint = field->getPosIndex(now->getIndex());
       now = now->getNext();

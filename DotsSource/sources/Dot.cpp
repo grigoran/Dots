@@ -89,14 +89,14 @@ bool Dot::findPath(Node *node, Node *start, int num) {
   for (int i = 0; i < 8; i++) {
     getedNode = nodes.get(index, i);
     if (getedNode == start && num > 2) {
-      getedNode->conect(node, getedNode);
+      node->conect(node, getedNode);
       node->unmark();
       return true;
     }
     if (getedNode->Team() == start->Team() && !getedNode->isConected() &&
         !getedNode->isMarked()) {
       if (findPath(getedNode, start, num + 1)) {
-        getedNode->conect(node, getedNode);
+        node->conect(node, getedNode);
         node->unmark();
         return true;
       }
