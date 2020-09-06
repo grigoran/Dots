@@ -1,21 +1,25 @@
 INCLPATH=DotsSource/headers
 SRCPATH=DotsSource/sources
 
+ADDEPENCE=-lsfml-system\
+		-lsfml-graphics\
+		-lsfml-window
+
 vpath %.cpp $(SRCPATH)
 vpath %.h $(INCLPATH)
 
-OBJS =  \
- Source.o \
- Dot.o \
- Field.o
+all: build
 
-all: Dots
+
+dbg: $(SRCPATH)/*.cpp
+	g++ -g $^ -I $(INCLPATH) $(ADDEPENCE) -o Dots
+	gdb Dots
  
-exec: Dots
+build: $(SRCPATH)/*.cpp
+	g++ $^ -I $(INCLPATH) $(ADDEPENCE) -o Dots
+
+
+ 
+exec: build
 	./Dots
 
-Dots: $(OBJS)
-	g++ $^ -o Dots  -lsfml-system -lsfml-graphics -lsfml-window 
-	rm *.o
-%.o : %.cpp
-	g++ -c $< -I $(INCLPATH)

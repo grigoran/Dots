@@ -1,9 +1,9 @@
 #include "Field.h"
-#include <iostream>
 #include <math.h>
 
-Field::Field(sf::Vector2i resol, int count, float thicknes) : lineCount(count),
-															  res(resol)
+Field::Field(sf::Vector2i resol, int count, float thicknes) : 
+	lineCount(count),
+	res(resol)
 {
 	sf::RectangleShape verticalLine(sf::Vector2f(thicknes, res.y));
 	sf::RectangleShape horizontalLine(sf::Vector2f(res.x, thicknes));
@@ -14,7 +14,6 @@ Field::Field(sf::Vector2i resol, int count, float thicknes) : lineCount(count),
 
 	dst = (float)res.x / lineCount;
 	yCount = res.y / dst;
-	std::cout << yCount << std::endl;
 
 	k = dst / 2;
 	for (int i = 0; i < lineCount; i++)
@@ -45,6 +44,11 @@ sf::Vector2i Field::getRes()
 sf::Vector2f Field::getPosIndex(int x, int y)
 {
 	return sf::Vector2f(x * dst + dst / 2, y * dst + dst / 2);
+}
+
+sf::Vector2f Field::getPosIndex(sf::Vector2i index)
+{
+	return sf::Vector2f(index.x * dst + dst / 2, index.y * dst + dst / 2);
 }
 
 sf::Vector2i Field::getNode(sf::Vector2f pos)

@@ -9,6 +9,7 @@ public:
 	sf::Vector2i getField();
 	sf::Vector2i getRes();
 	sf::Vector2f getPosIndex(int x, int y); //get pos from index
+	sf::Vector2f getPosIndex(sf::Vector2i index); //get pos from index
 private:
 	sf::Vector2i res;
 	float dst; //distance between lines
