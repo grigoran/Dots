@@ -94,7 +94,7 @@ int main()
         contours.add(node);
       }
     }
-    contours.update(deltaTime.asSeconds()*3);
+    contours.update(deltaTime.asSeconds());
 
     dot.move(dst * deltaTime.asSeconds() * 10.0f);
 

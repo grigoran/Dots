@@ -7,6 +7,6 @@ class Line : public sf::Drawable {
            float progress);
 
  private:
-  sf::VertexArray line;
+  sf::RectangleShape rect;
   virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 };

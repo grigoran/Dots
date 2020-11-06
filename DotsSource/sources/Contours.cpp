@@ -1,13 +1,16 @@
 #include "Contours.h"
 #include <iostream>
+#include <math.h>
 
 Contours::Contours(Field *_field)
 {
   field = _field;
+  stage=0;
   contours.reserve(10);
   contoursStates.reserve(10);
   contoursLenght.reserve(10);
   nowContourDraw = -1;
+  drawNodeNumber=0;
 }
 
 void Contours::add(Node *start)
@@ -16,6 +19,7 @@ void Contours::add(Node *start)
   contoursStates.push_back(false);
   Node *now = start;
   int count=0;
+  
   do
   {
     count++;
@@ -32,7 +36,10 @@ void Contours::update(float speed)
     {
       if (nowContourDraw == i)
       {
-        stage += speed;
+        float k1=3;
+        float k2=10;
+        float phase=sin(M_PI*drawNodeNumber/contoursLenght[i])/k2;
+        stage += speed*k1+phase;
         if (stage >= 1)
         {
           if (drawNodeNumber < contoursLenght[i]){
